@@ -1,5 +1,6 @@
 package com.example.salaries;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PaymentEntity {
@@ -11,10 +12,10 @@ public class PaymentEntity {
     private Double profit_tax;
     private Double prof_tax;
     private Double retirement_tax;
-    private LocalDateTime date;
+    private LocalDate date;
     private Double total;
 
-    public PaymentEntity(int id, String name, String address, String phone, String positionName, Double profit_tax, Double prof_tax, Double retirement_tax, LocalDateTime date, Double total) {
+    public PaymentEntity(int id, String name, String address, String phone, String positionName, Double profit_tax, Double prof_tax, Double retirement_tax, LocalDate date, Double total) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -59,7 +60,7 @@ public class PaymentEntity {
         return retirement_tax;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -67,7 +68,7 @@ public class PaymentEntity {
         return total;
     }
 
-    public static Double countProfitTax(Double salary, Integer calendarDays, Integer workDays) {
+    public static Double countWorkedSalary(Double salary, Integer calendarDays, Integer workDays) {
         return salary / calendarDays * workDays;
     }
     public static Double countBenefitMoney(Double salary, Double benefitMoney) {
@@ -76,7 +77,7 @@ public class PaymentEntity {
     public static Double countTaxes(Double salary, Double bonus, Double profit_tax, Double prof_tax, Double retirement_tax) {
         return ((salary + bonus) * (profit_tax + prof_tax + retirement_tax)) / 100;
     }
-    public static Double countTotalSalary(Double salary, Double bonus, Double taxes) {
+    public static Double countActualSalary(Double salary, Double bonus, Double taxes) {
         return (salary + bonus) - taxes;
     }
 }

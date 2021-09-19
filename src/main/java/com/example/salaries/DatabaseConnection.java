@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -45,7 +46,7 @@ public class DatabaseConnection {
                         Double.parseDouble(resultSet.getString("profit_tax")),
                         Double.parseDouble(resultSet.getString("prof_tax")),
                         Double.parseDouble(resultSet.getString("retirement_tax")),
-                        LocalDateTime.parse(resultSet.getString("date"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                        LocalDate.parse(resultSet.getString("date"), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                         Double.parseDouble(resultSet.getString("total")));
                 payments.add(payment);
             }
@@ -57,7 +58,6 @@ public class DatabaseConnection {
 
     }
     public ResultSet getEmployees(Connection connection) throws SQLException {
-        ObservableList<PaymentEntity> payments = FXCollections.observableArrayList();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("" +
                 "SELECT employees.id, positions.salary " +
@@ -67,7 +67,22 @@ public class DatabaseConnection {
         return resultSet;
     }
 
-    public void createPayments(Connection connection, ResultSet employeesResultSet, Double profit_tax, Double prof_tax, Double retirement_tax, LocalDateTime date) {
+    public void createPayments(Connection connection, ResultSet employeesResultSet, Double profit_tax, Double prof_tax, Double retirement_tax, Integer calendarDays, Integer workDays, Double benefitPercent, LocalDate date) throws SQLException {
+        while (employeesResultSet.next()) {
+            Double dbSalary = Double.parseDouble(employeesResultSet.getString("salary"));
+            Integer employeeId = Integer.parseInt(employeesResultSet.getString("id"));
+            Double workedSalary = PaymentEntity.countWorkedSalary(dbSalary, calendarDays, workDays);
+            Double benefitMoney = PaymentEntity.countBenefitMoney(workedSalary, benefitPercent);
+            Double taxes = PaymentEntity.countTaxes(workedSalary, benefitMoney, profit_tax, prof_tax, retirement_tax);
+            Double actualSalary = PaymentEntity.countActualSalary(workedSalary, benefitMoney, taxes);
 
+            try {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate("INSERT INTO payments (employeeId, profit_tax, prof_tax, retirement_tax, date, total) " +
+                        "VALUES(" + employeeId + ", "+profit_tax+", "+prof_tax+", "+retirement_tax+", '"+date+"', "+actualSalary+")");
+            } catch (SQLException err) {
+                err.printStackTrace();
+            }
+        }
     }
 }

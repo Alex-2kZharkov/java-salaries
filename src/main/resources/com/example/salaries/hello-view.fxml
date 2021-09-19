@@ -20,7 +20,7 @@
             <Font name="Lato Regular" size="18.0" />
          </font>
       </Label>
-      <TableView fx:id="paymentsTable" layoutX="10.0" layoutY="120.0" prefHeight="441.0" prefWidth="1097.0">
+      <TableView fx:id="paymentsTable" layoutY="120.0" prefHeight="441.0" prefWidth="1097.0">
         <columns>
           <TableColumn id="id" fx:id="id" prefWidth="75.0" text="№" />
           <TableColumn id="name" fx:id="name" prefWidth="152.0" text="ФИО сотрудника" />
@@ -48,7 +48,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </DatePicker>
-            <Button fx:id="countButton" layoutX="823.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: #1c2b47;" text="Рассчитать" textFill="WHITE">
+            <Button fx:id="countButton" layoutX="823.0" layoutY="20.0" mnemonicParsing="false" onAction="#countSalaries" style="-fx-background-color: #1c2b47;" text="Рассчитать" textFill="WHITE">
                <font>
                   <Font name="Lato Medium" size="13.0" />
                </font>

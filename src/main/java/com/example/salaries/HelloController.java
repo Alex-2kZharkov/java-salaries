@@ -1,7 +1,7 @@
 package com.example.salaries;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -9,8 +9,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -42,7 +43,7 @@ public class HelloController implements Initializable {
     private TableColumn<PaymentEntity, Double> retirement_tax;
 
     @FXML
-    private TableColumn<PaymentEntity, LocalDateTime> date;
+    private TableColumn<PaymentEntity, LocalDate> date;
 
     @FXML
     private TableColumn<PaymentEntity, Double> total;
@@ -99,5 +100,25 @@ public class HelloController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void countSalaries(ActionEvent event) throws SQLException {
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        Connection connection = dbConnection.getDatabaseLink();
+        ResultSet employeesResultSet = dbConnection.getEmployees(connection);
+        dbConnection.createPayments(
+                connection,
+                employeesResultSet,
+                Double.parseDouble(profitTaxField.getText()),
+                Double.parseDouble(profTaxField.getText()),
+                Double.parseDouble(retirementTaxField.getText()),
+                Integer.parseInt(calendarDaysField.getText()),
+                Integer.parseInt(workDaysField.getText()),
+                Double.parseDouble(benefitMoneyField.getText()),
+                dateField.getValue());
+
+        ObservableList<PaymentEntity> payments  = dbConnection.getPayments(connection);
+        paymentsTable.setItems(payments);
     }
 }
