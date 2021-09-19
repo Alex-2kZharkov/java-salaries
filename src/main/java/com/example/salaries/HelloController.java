@@ -75,10 +75,11 @@ public class HelloController implements Initializable {
     @FXML
     private TextField benefitMoneyField;
 
-    public void setPaymentsTable() throws SQLException {
+    public void setInitialValues() throws SQLException {
         DatabaseConnection dbConnection = new DatabaseConnection();
         Connection connection = dbConnection.getDatabaseLink();
         ObservableList<PaymentEntity> payments  = dbConnection.getPayments(connection);
+        totalPaiedField.setText(dbConnection.countAllPayments(connection));
         paymentsTable.setItems(payments);
     }
 
@@ -96,7 +97,7 @@ public class HelloController implements Initializable {
         total.setCellValueFactory(new PropertyValueFactory<>("total"));
 
         try {
-            setPaymentsTable();
+            setInitialValues();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,5 +121,6 @@ public class HelloController implements Initializable {
 
         ObservableList<PaymentEntity> payments  = dbConnection.getPayments(connection);
         paymentsTable.setItems(payments);
+        totalPaiedField.setText(dbConnection.countAllPayments(connection));
     }
 }

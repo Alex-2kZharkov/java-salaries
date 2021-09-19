@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -84,5 +85,12 @@ public class DatabaseConnection {
                 err.printStackTrace();
             }
         }
+    }
+
+    public String countAllPayments(Connection connection) throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT SUM(payments.total) AS count FROM payments");
+        resultSet.next();
+        return new DecimalFormat("#.##").format(Double.parseDouble(resultSet.getString("count")));
     }
 }
