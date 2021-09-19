@@ -67,5 +67,16 @@ public class PaymentEntity {
         return total;
     }
 
-//    public static Double countProfitTax()
+    public static Double countProfitTax(Double salary, Integer calendarDays, Integer workDays) {
+        return salary / calendarDays * workDays;
+    }
+    public static Double countBenefitMoney(Double salary, Double benefitMoney) {
+        return salary * benefitMoney / 100;
+    }
+    public static Double countTaxes(Double salary, Double bonus, Double profit_tax, Double prof_tax, Double retirement_tax) {
+        return ((salary + bonus) * (profit_tax + prof_tax + retirement_tax)) / 100;
+    }
+    public static Double countTotalSalary(Double salary, Double bonus, Double taxes) {
+        return (salary + bonus) - taxes;
+    }
 }

@@ -4,9 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
@@ -50,7 +48,31 @@ public class HelloController implements Initializable {
     private TableColumn<PaymentEntity, Double> total;
 
     @FXML
+    private TextField profitTaxField;
+
+    @FXML
+    private TextField profTaxField;
+
+    @FXML
+    private TextField retirementTaxField;
+
+    @FXML
+    private DatePicker dateField;
+
+    @FXML
     private Button countButton;
+
+    @FXML
+    private TextField totalPaiedField;
+
+    @FXML
+    private TextField calendarDaysField;
+
+    @FXML
+    private TextField workDaysField;
+
+    @FXML
+    private TextField benefitMoneyField;
 
     public void setPaymentsTable() throws SQLException {
         DatabaseConnection dbConnection = new DatabaseConnection();
