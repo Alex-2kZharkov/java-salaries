@@ -1,5 +1,6 @@
 package com.example.salaries;
 
+import com.example.salaries.Windows.ErrorWindow;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -105,6 +106,11 @@ public class HelloController implements Initializable {
 
     @FXML
     void countSalaries(ActionEvent event) throws SQLException {
+        if (Integer.parseInt(calendarDaysField.getText()) < Integer.parseInt(workDaysField.getText())) {
+            new ErrorWindow().showWindow("Расчет зарплат", "Количество рабочих дней больше количества календарных дней. Измените ввод");
+            return;
+        }
+
         DatabaseConnection dbConnection = new DatabaseConnection();
         Connection connection = dbConnection.getDatabaseLink();
         ResultSet employeesResultSet = dbConnection.getEmployees(connection);
